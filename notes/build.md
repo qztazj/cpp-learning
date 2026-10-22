@@ -1,50 +1,63 @@
 # 怎么编译和运行
 
-## 环境
+## 推荐：VS Code（已配好）
 
-你电脑上已经装了 **Visual Studio 2022 Community**（D 盘），里面自带微软的 C++ 编译器 `cl.exe`。
-不用再装 MinGW 之类的东西。
+用 VS Code **打开 `cpp-learning` 这个文件夹**（不是打开单个 .cpp 文件），然后：
 
-## 最简单的方式
+| 操作 | 效果 |
+| --- | --- |
+| `Ctrl + Alt + N` | 编译并运行当前文件（需装 Code Runner 插件） |
+| `Ctrl + Shift + B` | 只编译当前文件 |
+| `F5` | 带调试运行，可以打断点 |
 
-进入 `exercises/weekNN/` 目录，**双击 `编译运行.bat`**。
+配置都在 `.vscode/` 目录里，这个目录不进 Git（路径是本机的），换电脑需要重新配。
 
-它会把这个目录下所有 `.cpp` 编成同名 `.exe`，并且告诉你哪个通过、哪个报错。
+## 编译器在哪
 
-然后再双击生成的 `.exe` 就能跑。
+用的是 Dev-C++ 自带的那套 **TDM-GCC 9.2.0**：
 
-## 命令行方式（推荐慢慢习惯）
-
-打开 **开始菜单 → 搜索「x64 Native Tools Command Prompt for VS 2022」**，进入后：
-
-```bat
-cd C:\Users\qztaz\cpp-learning\exercises\week01
-cl /nologo /EHsc /std:c++17 /utf-8 week01_day01.cpp
-week01_day01.exe
+```
+C:\Program Files (x86)\Embarcadero\Dev-Cpp\TDM-GCC-64\bin\g++.exe
 ```
 
-参数说明：
+不用另外装 MinGW，Dev-C++ 已经帮你装好了。调试器 `gdb.exe` 在同目录，版本 8.3.1。
+
+## 手动命令行编译
+
+```bash
+"C:\Program Files (x86)\Embarcadero\Dev-Cpp\TDM-GCC-64\bin\g++.exe" -std=c++17 -Wall -fexec-charset=UTF-8 文件名.cpp -o 文件名.exe
+```
 
 | 参数 | 作用 |
 | --- | --- |
-| `/EHsc` | 开启 C++ 异常处理，不加会有一堆警告 |
-| `/std:c++17` | 用 C++17 标准 |
-| `/utf-8` | **必须加**，否则源码里的中文会乱码、甚至编译报错 |
-| `/nologo` | 不打印版权横幅 |
+| `-Wall` | 打开所有警告。**别省**，新手一半的错误它会提前告诉你 |
+| `-std=c++17` | 用 C++17 标准 |
+| `-fexec-charset=UTF-8` | 让程序输出的中文是 UTF-8，配合 `chcp 65001` 才不乱码 |
 
-## 为什么必须加 `/utf-8`
+## 中文乱码怎么办
 
-Windows 中文版默认按 GBK 编码理解源文件。你的 `.cpp` 是 UTF-8 存的，
-不加这个参数，`cout << "整型"` 这种中文会直接编译失败，报 `C2001: 常量中有换行符`。
+Windows 控制台默认用 GBK（代码页 936），而源码是 UTF-8 存的。两头对不上就乱码。
 
-这不是你的错，是编码的事。
+解决：运行前切换代码页。
 
-## 如果你想用 g++
-
-之后如果想装 MinGW / MSYS2，把 `g++` 加进 PATH 后可以直接：
-
-```bash
-g++ -std=c++17 -Wall -finput-charset=UTF-8 -fexec-charset=GBK week01_day01.cpp -o week01_day01.exe
+```cmd
+chcp 65001
 ```
 
-但**现在不需要**，先用 `cl` 就好。工具换来换去是最消耗时间的事。
+VS Code 的配置里已经自动做了（`settings.json` 和 `tasks.json` 里都有 `chcp 65001 >nul &&`）。
+
+如果你用 Dev-C++ 或 Code::Blocks，它们默认按 GBK 处理，通常反而不乱码——但**源码得用 GBK 保存**才不冲突。建议统一用 UTF-8 + `chcp 65001`，跟 Git 也一致。
+
+## 另一个选择：Dev-C++ / Code::Blocks
+
+打开软件 → 新建源文件 → 粘贴代码 → 按 `F11`（Dev-C++）编译运行。
+
+零配置，缺点是调试功能弱、界面老。学基础语法够用。
+
+## 编译产物
+
+`.exe`、`.obj`、`.pdb` 这些都在 `.gitignore` 里，不会被提交到 GitHub。
+
+## 之前写的另一个方案（备用）
+
+`exercises/weekNN/编译运行.bat` 也能用，它调的是 Visual Studio 2022 的 `cl.exe`，双击就能编译整个目录。但既然 VS Code 配好了，一般用不上。
