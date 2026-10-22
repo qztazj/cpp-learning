@@ -1,15 +1,52 @@
-# 编译产物，不要提交
+# ===== 编译产物 =====
 *.exe
 *.obj
 *.pdb
 *.ilk
 *.out
+*.o
+*.a
+*.lib
+*.exp
+*.tlog
+*.idb
+*.lastbuildstate
+*.aps
 
-# 编辑器
+# ===== Visual Studio =====
 .vs/
-.vscode/
-*.user
+Debug/
+Release/
+x64/
+x86/
+*.sln
+*.vcxproj
+*.vcxproj.*
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+ipch/
 
-# 系统
+# ===== VS Code =====
+.vscode/
+
+# ===== Code::Blocks / Dev-C++ =====
+*.cbp
+*.layout
+*.depend
+*.dev
+bin/
+obj/
+
+# ===== CMake =====
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+build/
+
+# ===== 系统 =====
 Thumbs.db
 desktop.ini
+.DS_Store
